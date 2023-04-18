@@ -37,7 +37,7 @@ public class ServicesServiceImpl implements ServicesService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(NoSuchElementException::new);
         User userFromDB = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("There is no user in database with provided id"));
+                .orElseThrow(NoSuchElementException::new);
 
         ServiceProduct service = ServiceProduct.builder()
                 .category(category)
@@ -52,11 +52,14 @@ public class ServicesServiceImpl implements ServicesService {
     }
 
     @Override
-    public List<ServiceProductDto> findAllByPagination(Integer page, Integer limit) {
+    public ResponseEntity<?> findAllByPagination(Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page, limit);
+        
         Page<ServiceProduct> serviceProductDtoPage = serviceRepository.findAll(pageRequest);
         List<ServiceProductDto> serviceProductDtos = mapper.serviceProductsToServiceProductsDto(serviceProductDtoPage.getContent());
-        return serviceProductDtos.stream().filter(x -> x.getStatus().equals(ServiceStatusEnum.PUBLISHED.toString())).collect(Collectors.toList());
+        long totalElements = serviceProductDtoPage.getTotalElements();
+        List<ServiceProductDto> collect = serviceProductDtos.stream().filter(x -> x.getStatus().equals(ServiceStatusEnum.PUBLISHED.toString())).collect(Collectors.toList());
+        return ResponseEntity.ok().header("total", String.valueOf(totalElements)).body(collect);
     }
 
     @Override

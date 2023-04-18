@@ -1,5 +1,6 @@
 package com.example.thebest_youdo.service.impl;
 
+import com.example.thebest_youdo.exception.ResourceNotFoundException;
 import com.example.thebest_youdo.model.dto.request.AuthenticationRequest;
 import com.example.thebest_youdo.model.dto.request.RegisterRequest;
 import com.example.thebest_youdo.model.dto.responce.AuthenticationResponse;
@@ -9,7 +10,10 @@ import com.example.thebest_youdo.repository.AuthorityRepository;
 import com.example.thebest_youdo.repository.UserRepository;
 import com.example.thebest_youdo.security.jwt.JwtService;
 import com.example.thebest_youdo.service.AuthenticationService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,5 +70,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<?> validateToken(String token) {
+                if (token.equals("") || token == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            try {
+                User user = userRepository.findByUsername(jwtService.extractUsername(token)).orElseThrow(() -> new ResourceNotFoundException("there is no user with provided username"));
+                Boolean isValidToken = jwtService.isTokenValid(token, user);
+                return ResponseEntity.ok(isValidToken);
+            } catch (ExpiredJwtException exception) {
+                return ResponseEntity.ok(false);
+            }
+        }
     }
 }

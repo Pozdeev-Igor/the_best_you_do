@@ -62,6 +62,9 @@ public class User implements UserDetails {
     @Column(name = "count")
     private Long count;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnore
     private List<Authority> authorities = new ArrayList<>();

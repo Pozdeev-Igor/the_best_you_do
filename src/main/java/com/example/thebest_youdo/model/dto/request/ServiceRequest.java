@@ -25,4 +25,5 @@ public class ServiceRequest {
     private String description;
     private UUID categoryId;
     private String price;
+    private MultipartFile file;
 }

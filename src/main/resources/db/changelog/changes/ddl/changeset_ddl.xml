@@ -34,6 +34,14 @@
                  stripComments="true"/>
     </changeSet>
 
+    <changeSet id="18_04_2023_3__alter_table_users_add_columnt_avatar" author="i.pozdeev" runAlways="false"
+               runOnChange="false">
+        <comment>Добавление колонки со сылкой на аватар</comment>
+        <sqlFile path="sql/init/18_04_2023_3__alter_table_users_add_columnt_avatar.sql" relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
 </databaseChangeLog>
 
 

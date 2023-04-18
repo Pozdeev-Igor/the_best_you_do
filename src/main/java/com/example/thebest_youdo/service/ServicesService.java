@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ServicesService {
     ResponseEntity<?> save(ServiceRequest request, UUID userId);
 
-    List<ServiceProductDto> findAllByPagination(Integer page, Integer limit);
+   ResponseEntity<?> findAllByPagination(Integer page, Integer limit);
 
     ResponseEntity<?> deleteService(UUID serviceId, UUID userId);
 

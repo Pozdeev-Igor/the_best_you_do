@@ -1,7 +1,6 @@
 package com.example.thebest_youdo.controller;
 
 import com.example.thebest_youdo.handler.ErrorResponse;
-import com.example.thebest_youdo.model.dto.responce.ServiceProductDto;
 import com.example.thebest_youdo.service.ServicesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -38,7 +37,7 @@ public class MainController {
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class)))
             })
-    public ResponseEntity<List<ServiceProductDto>> pagingFindAll(@RequestParam Integer page, @RequestParam Integer limit) {
-        return ResponseEntity.ok(servicesService.findAllByPagination(page, limit));
+    public ResponseEntity<?> pagingFindAll(@RequestParam Integer page, @RequestParam Integer limit) {
+        return servicesService.findAllByPagination(page, limit);
     }
 }
