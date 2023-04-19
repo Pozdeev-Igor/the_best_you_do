@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(servers = {
-        @Server( url = "https://the-best-you-do.osc-fr1.scalingo.io/", description = "web"),
-        @Server( url = "http://localhost:8080", description = "dev")
+        @Server( url = "https://the-best-you-do.osc-fr1.scalingo.io")
 })
 public class TheBestYouDoApplication {
 
