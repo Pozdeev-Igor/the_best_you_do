@@ -20,7 +20,6 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @RequiredArgsConstructor
-@PropertySource("classpath:application.properties")
 public class ApplicationConfig {
 
     private final UserRepository repository;
