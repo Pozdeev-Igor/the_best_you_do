@@ -1,11 +1,15 @@
 package com.example.thebest_youdo;
 
-import com.example.thebest_youdo.model.constant.ServiceStatusEnum;
-import com.example.thebest_youdo.model.dto.responce.ServiceProductDto;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@OpenAPIDefinition(servers = {
+        @Server( url = "https://the-best-you-do.osc-fr1.scalingo.io/", description = "web"),
+        @Server( url = "http://localhost:8080", description = "dev")
+})
 public class TheBestYouDoApplication {
 
     public static void main(String[] args) {
