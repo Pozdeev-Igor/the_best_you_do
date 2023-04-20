@@ -18,17 +18,21 @@ public class ImageUploader {
     @Value("${cloudinary.api-secret}")
     private static String apiSecret;
 
-    public static String upload(MultipartFile file) {
+    private static Cloudinary getCloudinary(MultipartFile file) {
         Map config = new HashMap<String, String>();
-        config.put("cloud_name", cloudName);
-        config.put("api_key", apiKey);
-        config.put("api_secret", apiSecret);
-        Cloudinary cloudinary = new Cloudinary(config);
+        config.put("cloud_name", "ddkxweaw0");
+        config.put("api_key", "132132136374712");
+        config.put("api_secret", "TxqRFXqAllArZqLS6bWaQ1TO2tc");
+        return new Cloudinary(config);
+    }
+
+    public static String upload(MultipartFile file) {
 
         String publicId = "";
+                Cloudinary cloudinary = getCloudinary(file);
         try {
-            Map uploadRsult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            publicId = uploadRsult.get("public_id").toString();
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            publicId = uploadResult.get("public_id").toString();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
         }

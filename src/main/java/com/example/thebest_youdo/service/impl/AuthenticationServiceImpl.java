@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .phoneNumber(request.getPhoneNumber())
+                .phoneNumber(request.getPhoneNumber().replaceAll("\\D", ""))
                 .authorities(Collections.singletonList(authority))
                 .dayStart(LocalDate.now())
                 .count(0L)
