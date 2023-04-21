@@ -20,7 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +35,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
-        Authority authority = new Authority();
-        authority.setAuthorityName(request.getRole());
+        List<String> roles = request.getAuthorities();
+        List<Authority> authorities = roles.stream()
+                .map(role -> {
+                    Authority authority = new Authority();
+                    authority.setAuthorityName(role);
+                    return authority;
+                })
+                .collect(Collectors.toList());
 
         User newUser = User.builder()
                 .username(request.getUsername())
@@ -43,15 +50,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber().replaceAll("\\D", ""))
-                .authorities(Collections.singletonList(authority))
+                .authorities(authorities)
                 .dayStart(LocalDate.now())
                 .count(0L)
                 .rate(0.0f)
                 .build();
 
-        authority.setUser(newUser);
         userRepository.save(newUser);
-        authRepo.save(authority);
+        authorities.forEach(authority -> {
+            authority.setUser(newUser);
+            authRepo.save(authority);
+        });
 
         String token = jwtService.generateToken(newUser, newUser);
         return AuthenticationResponse.builder()
@@ -74,7 +83,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public ResponseEntity<?> validateToken(String token) {
-                if (token.equals("") || token == null) {
+        if (token.equals("") || token == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             try {

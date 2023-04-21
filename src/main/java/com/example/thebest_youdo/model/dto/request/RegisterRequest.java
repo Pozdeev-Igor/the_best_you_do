@@ -1,11 +1,12 @@
 package com.example.thebest_youdo.model.dto.request;
 
 
-import com.example.thebest_youdo.model.entity.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Builder
 @Data
@@ -19,6 +20,6 @@ public class RegisterRequest {
     private String password;
     private String confirmPassword;
     private String phoneNumber;
-    private String role;
+    private List<String> authorities;
 
 }
